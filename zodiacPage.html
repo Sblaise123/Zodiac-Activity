@@ -1,0 +1,609 @@
+ <script>
+        // ===== APPLICATION STATE =====
+        let currentUser = null;
+        let users = JSON.parse(localStorage.getItem('zodiacUsers') || '[]');
+
+        // ===== ZODIAC SIGN DATA =====
+        const zodiacData = {
+            aries: {
+                name: "Aries",
+                symbol: "♈",
+                dates: "March 21 - April 19",
+                traits: ["energetic", "competitive", "leadership", "adventurous"],
+                activities: [
+                    {
+                        icon: "🏃‍♂️",
+                        title: "High-Intensity Workouts",
+                        description: "Challenge yourself with intense fitness routines that match your competitive spirit.",
+                        tags: ["fitness", "competition", "energy"]
+                    },
+                    {
+                        icon: "🧗‍♀️",
+                        title: "Rock Climbing",
+                        description: "Conquer new heights and test your limits with this thrilling adventure sport.",
+                        tags: ["adventure", "physical", "challenge"]
+                    },
+                    {
+                        icon: "🎯",
+                        title: "Martial Arts Training",
+                        description: "Channel your warrior energy into disciplined combat sports and self-defense.",
+                        tags: ["discipline", "physical", "focus"]
+                    }
+                ]
+            },
+            taurus: {
+                name: "Taurus",
+                symbol: "♉",
+                dates: "April 20 - May 20",
+                traits: ["practical", "reliable", "luxury-loving", "nature-connected"],
+                activities: [
+                    {
+                        icon: "🌿",
+                        title: "Gardening & Plant Care",
+                        description: "Connect with nature by growing your own herbs, flowers, or vegetables.",
+                        tags: ["nature", "peaceful", "nurturing"]
+                    },
+                    {
+                        icon: "🍳",
+                        title: "Gourmet Cooking",
+                        description: "Indulge your love for fine food by mastering culinary arts and new recipes.",
+                        tags: ["sensory", "creative", "luxury"]
+                    },
+                    {
+                        icon: "🎨",
+                        title: "Pottery & Ceramics",
+                        description: "Create beautiful, practical art with your hands while enjoying the meditative process.",
+                        tags: ["creative", "meditative", "practical"]
+                    }
+                ]
+            },
+            gemini: {
+                name: "Gemini",
+                symbol: "♊",
+                dates: "May 21 - June 20",
+                traits: ["curious", "communicative", "versatile", "intellectual"],
+                activities: [
+                    {
+                        icon: "📚",
+                        title: "Speed Reading & Book Clubs",
+                        description: "Feed your curious mind with diverse literature and engaging discussions.",
+                        tags: ["intellectual", "social", "learning"]
+                    },
+                    {
+                        icon: "🎭",
+                        title: "Improv Comedy Classes",
+                        description: "Express your quick wit and adaptability through spontaneous performance art.",
+                        tags: ["creative", "social", "spontaneous"]
+                    },
+                    {
+                        icon: "💬",
+                        title: "Language Learning",
+                        description: "Challenge your communication skills by mastering new languages and cultures.",
+                        tags: ["intellectual", "communication", "cultural"]
+                    }
+                ]
+            },
+            cancer: {
+                name: "Cancer",
+                symbol: "♋",
+                dates: "June 21 - July 22",
+                traits: ["nurturing", "emotional", "home-loving", "intuitive"],
+                activities: [
+                    {
+                        icon: "🏠",
+                        title: "Home Decorating & DIY",
+                        description: "Create a beautiful, cozy sanctuary that reflects your personal style.",
+                        tags: ["home", "creative", "comfort"]
+                    },
+                    {
+                        icon: "👶",
+                        title: "Volunteering with Children",
+                        description: "Share your nurturing nature by helping kids through mentoring or tutoring.",
+                        tags: ["nurturing", "community", "meaningful"]
+                    },
+                    {
+                        icon: "📖",
+                        title: "Journaling & Scrapbooking",
+                        description: "Preserve memories and process emotions through creative documentation.",
+                        tags: ["emotional", "creative", "reflective"]
+                    }
+                ]
+            },
+            leo: {
+                name: "Leo",
+                symbol: "♌",
+                dates: "July 23 - August 22",
+                traits: ["confident", "creative", "dramatic", "generous"],
+                activities: [
+                    {
+                        icon: "🎪",
+                        title: "Theater & Performance",
+                        description: "Shine in the spotlight with acting, singing, or other performing arts.",
+                        tags: ["performance", "creative", "spotlight"]
+                    },
+                    {
+                        icon: "📸",
+                        title: "Photography & Modeling",
+                        description: "Capture and create beauty while expressing your artistic vision.",
+                        tags: ["creative", "visual", "artistic"]
+                    },
+                    {
+                        icon: "🎉",
+                        title: "Event Planning",
+                        description: "Use your flair for drama to create memorable celebrations and gatherings.",
+                        tags: ["social", "creative", "leadership"]
+                    }
+                ]
+            },
+            virgo: {
+                name: "Virgo",
+                symbol: "♍",
+                dates: "August 23 - September 22",
+                traits: ["analytical", "perfectionist", "helpful", "detail-oriented"],
+                activities: [
+                    {
+                        icon: "🧹",
+                        title: "Organization & Decluttering",
+                        description: "Find satisfaction in creating order and efficiency in your living spaces.",
+                        tags: ["organization", "productivity", "systematic"]
+                    },
+                    {
+                        icon: "📊",
+                        title: "Data Analysis & Research",
+                        description: "Dive deep into subjects that interest you with thorough investigation.",
+                        tags: ["analytical", "intellectual", "detailed"]
+                    },
+                    {
+                        icon: "🌱",
+                        title: "Wellness & Health Coaching",
+                        description: "Help others improve their lives while perfecting your own wellness routines.",
+                        tags: ["health", "helpful", "improvement"]
+                    }
+                ]
+            },
+            libra: {
+                name: "Libra",
+                symbol: "♎",
+                dates: "September 23 - October 22",
+                traits: ["diplomatic", "artistic", "social", "balanced"],
+                activities: [
+                    {
+                        icon: "🎨",
+                        title: "Art Gallery Visits & Curation",
+                        description: "Immerse yourself in beautiful art and help others appreciate aesthetic beauty.",
+                        tags: ["artistic", "cultural", "aesthetic"]
+                    },
+                    {
+                        icon: "💃",
+                        title: "Partner Dancing",
+                        description: "Express your love for harmony and connection through ballroom or Latin dance.",
+                        tags: ["social", "balanced", "graceful"]
+                    },
+                    {
+                        icon: "🤝",
+                        title: "Mediation & Conflict Resolution",
+                        description: "Use your diplomatic skills to help others find fair and peaceful solutions.",
+                        tags: ["diplomatic", "helpful", "peaceful"]
+                    }
+                ]
+            },
+            scorpio: {
+                name: "Scorpio",
+                symbol: "♏",
+                dates: "October 23 - November 21",
+                traits: ["intense", "mysterious", "transformative", "passionate"],
+                activities: [
+                    {
+                        icon: "🔍",
+                        title: "Detective Work & True Crime",
+                        description: "Channel your investigative nature into solving mysteries and puzzles.",
+                        tags: ["mystery", "investigation", "intense"]
+                    },
+                    {
+                        icon: "🧘‍♀️",
+                        title: "Deep Meditation & Spirituality",
+                        description: "Explore the depths of consciousness through transformative practices.",
+                        tags: ["spiritual", "transformative", "deep"]
+                    },
+                    {
+                        icon: "💎",
+                        title: "Jewelry Making & Gemology",
+                        description: "Work with precious materials to create powerful, meaningful pieces.",
+                        tags: ["creative", "mysterious", "valuable"]
+                    }
+                ]
+            },
+            sagittarius: {
+                name: "Sagittarius",
+                symbol: "♐",
+                dates: "November 22 - December 21",
+                traits: ["adventurous", "philosophical", "free-spirited", "optimistic"],
+                activities: [
+                    {
+                        icon: "✈️",
+                        title: "Adventure Travel",
+                        description: "Explore new cultures and places that expand your worldview.",
+                        tags: ["adventure", "travel", "cultural"]
+                    },
+                    {
+                        icon: "🏹",
+                        title: "Archery & Target Sports",
+                        description: "Practice focus and precision while enjoying your symbol's sport.",
+                        tags: ["focus", "skill", "symbolic"]
+                    },
+                    {
+                        icon: "🎓",
+                        title: "Teaching & Sharing Knowledge",
+                        description: "Share your wisdom and love of learning with eager students.",
+                        tags: ["educational", "sharing", "wisdom"]
+                    }
+                ]
+            },
+            capricorn: {
+                name: "Capricorn",
+                symbol: "♑",
+                dates: "December 22 - January 19",
+                traits: ["ambitious", "disciplined", "practical", "responsible"],
+                activities: [
+                    {
+                        icon: "🏔️",
+                        title: "Mountain Climbing & Hiking",
+                        description: "Conquer peaks and reach new heights through persistent effort.",
+                        tags: ["ambitious", "physical", "goal-oriented"]
+                    },
+                    {
+                        icon: "💼",
+                        title: "Business & Entrepreneurship",
+                        description: "Build something lasting through careful planning and hard work.",
+                        tags: ["business", "ambitious", "practical"]
+                    },
+                    {
+                        icon: "📈",
+                        title: "Investment & Financial Planning",
+                        description: "Secure your future through disciplined saving and smart investing.",
+                        tags: ["practical", "long-term", "security"]
+                    }
+                ]
+            },
+            aquarius: {
+                name: "Aquarius",
+                symbol: "♒",
+                dates: "January 20 - February 18",
+                traits: ["innovative", "humanitarian", "independent", "eccentric"],
+                activities: [
+                    {
+                        icon: "💻",
+                        title: "Tech Innovation & Coding",
+                        description: "Create the future through technology and innovative solutions.",
+                        tags: ["technology", "innovation", "future"]
+                    },
+                    {
+                        icon: "🌍",
+                        title: "Social Activism & Volunteering",
+                        description: "Make the world better through humanitarian efforts and social change.",
+                        tags: ["humanitarian", "social", "meaningful"]
+                    },
+                    {
+                        icon: "🛸",
+                        title: "Astronomy & Space Exploration",
+                        description: "Explore the cosmos and push the boundaries of human knowledge.",
+                        tags: ["scientific", "exploration", "cosmic"]
+                    }
+                ]
+            },
+            pisces: {
+                name: "Pisces",
+                symbol: "♓",
+                dates: "February 19 - March 20",
+                traits: ["intuitive", "creative", "empathetic", "dreamy"],
+                activities: [
+                    {
+                        icon: "🎵",
+                        title: "Music & Sound Therapy",
+                        description: "Express your emotions and heal others through the power of music.",
+                        tags: ["creative", "emotional", "healing"]
+                    },
+                    {
+                        icon: "🏊‍♀️",
+                        title: "Swimming & Water Activities",
+                        description: "Connect with your element through peaceful water-based activities.",
+                        tags: ["water", "peaceful", "natural"]
+                    },
+                    {
+                        icon: "🎨",
+                        title: "Abstract Art & Painting",
+                        description: "Channel your dreams and intuition into beautiful visual expressions.",
+                        tags: ["creative", "intuitive", "expressive"]
+                    }
+                ]
+            }
+        };
+
+        // ===== UTILITY FUNCTIONS =====
+        function showPage(pageName) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show selected page
+            const selectedPage = document.getElementById(pageName + 'Page');
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+
+            // Update navigation visibility
+            updateNavigation();
+        }
+
+        function updateNavigation() {
+            const activitiesNav = document.getElementById('activitiesNav');
+            if (currentUser) {
+                activitiesNav.style.display = 'block';
+            } else {
+                activitiesNav.style.display = 'none';
+            }
+        }
+
+        function showMessage(containerId, message, type = 'success') {
+            const container = document.getElementById(containerId);
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message message-${type}`;
+            messageDiv.textContent = message;
+            
+            container.innerHTML = '';
+            container.appendChild(messageDiv);
+
+            // Auto-remove message after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.parentNode.removeChild(messageDiv);
+                }
+            }, 5000);
+        }
+
+        function saveUsers() {
+            localStorage.setItem('zodiacUsers', JSON.stringify(users));
+        }
+
+        // ===== AUTHENTICATION FUNCTIONS =====
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            // Validate input
+            if (!email || !password) {
+                showMessage('loginMessages', 'Please fill in all fields.', 'error');
+                return;
+            }
+
+            // Find user
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                showMessage('loginMessages', `Welcome back, ${user.name}! 🌟`, 'success');
+                
+                setTimeout(() => {
+                    showPage('activities');
+                    updateNavigation();
+                }, 1500);
+            } else {
+                showMessage('loginMessages', 'Invalid email or password. Please try again.', 'error');
+            }
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const birthday = document.getElementById('registerBirthday').value;
+
+            // Validate input
+            if (!name || !email || !password || !birthday) {
+                showMessage('registerMessages', 'Please fill in all fields.', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('registerMessages', 'Password must be at least 6 characters long.', 'error');
+                return;
+            }
+
+            // Check if user already exists
+            if (users.find(u => u.email === email)) {
+                showMessage('registerMessages', 'An account with this email already exists.', 'error');
+                return;
+            }
+
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                password: password,
+                birthday: birthday,
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            saveUsers();
+            currentUser = newUser;
+
+            showMessage('registerMessages', `Welcome to ZodiacLife, ${name}! ✨`, 'success');
+            
+            setTimeout(() => {
+                showPage('activities');
+                updateNavigation();
+            }, 1500);
+        }
+
+        // ===== ZODIAC CALCULATION FUNCTIONS =====
+        function getZodiacSign(month, day) {
+            const date = parseInt(month) * 100 + parseInt(day);
+            
+            if ((date >= 321 && date <= 331) || (date >= 401 && date <= 419)) return 'aries';
+            if ((date >= 420 && date <= 430) || (date >= 501 && date <= 520)) return 'taurus';
+            if ((date >= 521 && date <= 531) || (date >= 601 && date <= 620)) return 'gemini';
+            if ((date >= 621 && date <= 630) || (date >= 701 && date <= 722)) return 'cancer';
+            if ((date >= 723 && date <= 731) || (date >= 801 && date <= 822)) return 'leo';
+            if ((date >= 823 && date <= 831) || (date >= 901 && date <= 922)) return 'virgo';
+            if ((date >= 923 && date <= 930) || (date >= 1001 && date <= 1022)) return 'libra';
+            if ((date >= 1023 && date <= 1031) || (date >= 1101 && date <= 1121)) return 'scorpio';
+            if ((date >= 1122 && date <= 1130) || (date >= 1201 && date <= 1221)) return 'sagittarius';
+            if ((date >= 1222 && date <= 1231) || (date >= 101 && date <= 119)) return 'capricorn';
+            if ((date >= 120 && date <= 131) || (date >= 201 && date <= 218)) return 'aquarius';
+            if ((date >= 219 && date <= 229) || (date >= 301 && date <= 320)) return 'pisces';
+            
+            return null;
+        }
+
+        function generateActivities() {
+            const month = document.getElementById('birthMonth').value;
+            const day = document.getElementById('birthDay').value;
+            const resultContainer = document.getElementById('zodiacResult');
+
+            if (!month || !day) {
+                resultContainer.style.display = 'none';
+                return;
+            }
+
+            const zodiacSign = getZodiacSign(month, day);
+            if (!zodiacSign) {
+                resultContainer.style.display = 'none';
+                return;
+            }
+
+            const signData = zodiacData[zodiacSign];
+            
+            resultContainer.innerHTML = `
+                <div class="zodiac-display">
+                    <span class="zodiac-symbol">${signData.symbol}</span>
+                    <h2 class="zodiac-name">${signData.name}</h2>
+                    <p class="zodiac-dates">${signData.dates}</p>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-top: 1rem;">
+                        ${signData.traits.map(trait => `<span class="activity-tag">${trait}</span>`).join('')}
+                    </div>
+                </div>
+
+                <h3 style="text-align: center; margin: 2rem 0 1rem 0; color: var(--text-primary); font-size: 1.75rem;">
+                    🌟 Perfect Activities for You
+                </h3>
+
+                <div class="activities-grid">
+                    ${signData.activities.map(activity => `
+                        <div class="activity-card" onclick="selectActivity('${activity.title}')">
+                            <span class="activity-icon">${activity.icon}</span>
+                            <h4 class="activity-title">${activity.title}</h4>
+                            <p class="activity-description">${activity.description}</p>
+                            <div class="activity-tags">
+                                ${activity.tags.map(tag => `<span class="activity-tag">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-radius: 1rem; border: 2px solid var(--primary-cyan);">
+                    <h4 style="color: var(--text-primary); margin-bottom: 0.5rem;">✨ Your Cosmic Insight</h4>
+                    <p style="color: var(--text-secondary); font-style: italic;">
+                        As a ${signData.name}, you naturally gravitate toward activities that align with your 
+                        ${signData.traits.slice(0, 2).join(' and ')} nature. These recommendations are designed 
+                        to help you thrive and find joy in your unique astrological energy.
+                    </p>
+                </div>
+            `;
+
+            resultContainer.style.display = 'block';
+
+            // Smooth scroll to results
+            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function selectActivity(activityTitle) {
+            alert(`🌟 Great choice! "${activityTitle}" sounds perfect for your cosmic energy. Start your journey today and let the stars guide you to new adventures! ✨`);
+        }
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the application
+            console.log('🌟 ZodiacLife Application Initialized');
+            
+            // Set up form validation
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                const inputs = form.querySelectorAll('input[required]');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', function() {
+                        if (this.value.trim() === '') {
+                            this.style.borderColor = '#ef4444';
+                        } else {
+                            this.style.borderColor = '#10b981';
+                        }
+                    });
+                });
+            });
+
+            // Add smooth animations on page load
+            const cards = document.querySelectorAll('.feature-card, .activity-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        // ===== DEMO DATA (for showcase) =====
+        function loadDemoData() {
+            if (users.length === 0) {
+                users.push({
+                    id: 1,
+                    name: 'Demo User',
+                    email: 'demo@zodiaclife.com',
+                    password: 'demo123',
+                    birthday: '1995-07-15',
+                    createdAt: new Date().toISOString()
+                });
+                saveUsers();
+                console.log('📊 Demo data loaded');
+            }
+        }
+
+        // Load demo data on application start
+        loadDemoData();
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', function(event) {
+            if (event.altKey) {
+                switch(event.key) {
+                    case 'h':
+                        event.preventDefault();
+                        showPage('home');
+                        break;
+                    case 'l':
+                        event.preventDefault();
+                        showPage('login');
+                        break;
+                    case 'r':
+                        event.preventDefault();
+                        showPage('register');
+                        break;
+                    case 'a':
+                        event.preventDefault();
+                        if (currentUser) showPage('activities');
+                        break;
+                }
+            }
+        });
+
+        console.log('🔮 Welcome to ZodiacLife! Use Alt+H for Home, Alt+L for Login, Alt+R for Register, Alt+A for Activities');
+</script>

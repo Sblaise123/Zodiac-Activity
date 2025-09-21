@@ -1,0 +1,70 @@
+ <section id="registerPage" class="page-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2 class="auth-title">✨ Join ZodiacLife</h2>
+                    <p class="auth-subtitle">Create your account to unlock personalized activities</p>
+                </div>
+                
+                <form class="auth-form" id="registerForm" onsubmit="handleRegister(event)">
+                    <div id="registerMessages"></div>
+                    
+                    <div class="form-group">
+                        <label for="registerName" class="form-label">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="registerName" 
+                            class="form-input" 
+                            required 
+                            placeholder="Your full name"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerEmail" class="form-label">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="registerEmail" 
+                            class="form-input" 
+                            required 
+                            placeholder="your.email@example.com"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerPassword" class="form-label">Password</label>
+                        <input 
+                            type="password" 
+                            id="registerPassword" 
+                            class="form-input" 
+                            required 
+                            minlength="6"
+                            placeholder="Create a strong password"
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registerBirthday" class="form-label">Your Birthday</label>
+                        <input 
+                            type="date" 
+                            id="registerBirthday" 
+                            class="form-input" 
+                            required
+                        >
+                    </div>
+                    
+                    <button type="submit" class="form-button">
+                        🌟 Create My Cosmic Profile
+                    </button>
+                </form>
+                
+                <div class="auth-switch">
+                    <p>Already have an account? 
+                        <a href="#" class="auth-switch-link" onclick="showPage('login')">
+                            Sign in here
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
